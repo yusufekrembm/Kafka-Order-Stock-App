@@ -1,0 +1,24 @@
+# Maven / build çıktıları
+order-app/target/
+**/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.classpath
+*.project
+.settings/
+
+# Loglar
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Medium yazisi ve gorseller (yerelde tutuluyor, GitHub'a yuklenmez)
+medium/
+
+# Kisisel ogrenme notlari (yerelde tutuluyor)
+00-Kafka-Notlari.md

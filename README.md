@@ -88,27 +88,74 @@ fiş panoda durur, geri gelince kaldığı yerden devam eder.
 
 ## 🚀 Kurulum ve Çalıştırma
 
-### Gereksinimler
-- Docker Desktop
-- Java 21
+> Aşağıdaki adımları takip ederek projeyi **sıfırdan** çalıştırabilirsin.
+> Maven kurmana gerek yok — proje kendi Maven'ını (wrapper) indirir.
 
-### 1) Kafka'yı ayağa kaldır
+### 0) Gereksinimleri kur
+
+| Araç | Ne işe yarar | İndirme |
+|------|--------------|---------|
+| **Git** | Projeyi klonlamak için | https://git-scm.com/downloads |
+| **Docker Desktop** | Kafka'yı container'da çalıştırmak için | https://www.docker.com/products/docker-desktop |
+| **Java 21 (JDK)** | Spring Boot uygulamasını çalıştırmak için | https://adoptium.net |
+
+Kurulumdan sonra kontrol et:
+```bash
+git --version
+docker --version
+java -version      # 21 görünmeli
+```
+> ⚠️ **Docker Desktop'ı başlat ve tamamen açılmasını bekle.** Kafka, Docker motoru
+> çalışmadan ayağa kalkmaz.
+
+### 1) Projeyi klonla
+```bash
+git clone https://github.com/yusufekrembm/Kafka-Order-Stock-App.git
+cd Kafka-Order-Stock-App
+```
+
+### 2) Kafka'yı ayağa kaldır
 ```bash
 docker compose up -d
 ```
-- Kafka broker → `localhost:9092`
-- Kafka UI → http://localhost:8080
+Bu komut iki container başlatır:
+- **Kafka broker** → `localhost:9092` (uygulamanın bağlanacağı adres)
+- **Kafka UI** → http://localhost:8080 (panoyu tarayıcıdan izlersin)
 
-### 2) Uygulamayı çalıştır
+Çalıştığını doğrula:
+```bash
+docker compose ps               # iki container da "Up" görünmeli
+```
+
+### 3) Uygulamayı çalıştır
 ```bash
 cd order-app
-./mvnw spring-boot:run        # Windows: .\mvnw.cmd spring-boot:run
+
+# Linux / macOS:
+./mvnw spring-boot:run
+
+# Windows (PowerShell):
+.\mvnw.cmd spring-boot:run
 ```
-Uygulama → http://localhost:8081 (Kafka UI 8080'de olduğu için 8081 kullanıldı)
+> İlk çalıştırmada Maven ve bağımlılıklar indirileceği için biraz uzun sürebilir.
+> Loglarda `Started OrderAppApplication` yazısını görünce hazırdır.
+
+Uygulama → http://localhost:8081
+(Kafka UI 8080'i kullandığı için uygulama 8081 portunda çalışır.)
+
+### 4) Test et
+Aşağıdaki [Test etme](#-test-etme) bölümünden bir sipariş gönder ve hem uygulama
+loglarında hem de Kafka UI'da mesajın işlendiğini gör.
 
 ### Durdurmak için
 ```bash
-docker compose down           # Kafka'yı durdur
+# Uygulamayı durdur: terminalde Ctrl + C
+
+# Kafka'yı durdur (veriler korunur):
+docker compose down
+
+# Kafka'yı durdur + tüm verileri sil (temiz başlangıç):
+docker compose down -v
 ```
 
 ---
